@@ -28,7 +28,7 @@ class Aafm:
 		self.refresh_devices()
 
 	def execute(self, *args):
-		print "EXECUTE", args
+		print "EXECUTE", "'%s'" % "' '".join(args)
 		proc = subprocess.Popen(args, stdout=subprocess.PIPE)
 		return filter(None, [line.rstrip('\r\n') for line in proc.stdout])
 
@@ -187,7 +187,7 @@ class Aafm:
 
 	def device_delete_item(self, path):
 		if not self.is_device_file_a_directory(path):
-			yield (self.adb_shell, ('rm', path))
+			yield (self.adb_shell, ('rm', "'%s'" % path))
 			return
 
 		# TODO: Maybe we can use "rm -rf" here?

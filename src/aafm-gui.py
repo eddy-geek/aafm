@@ -35,11 +35,12 @@ class Aafm_GUI:
 	XDS_ATOM = gtk.gdk.atom_intern("XdndDirectSave0")
 	TEXT_ATOM = gtk.gdk.atom_intern("text/plain")
 	XDS_FILENAME = 'whatever.txt'
+	DEVICE_ROOT = '/storage/emulated/0/'
 
 	def __init__(self, args):
 		
 		# The super core
-		self.aafm = Aafm('adb', os.getcwd(), '/mnt/sdcard/')
+		self.aafm = Aafm('adb', os.getcwd(), self.DEVICE_ROOT)
 		self.queue = []
 
 		self.basedir = os.path.dirname(os.path.abspath(__file__))
@@ -154,7 +155,7 @@ class Aafm_GUI:
 		self.window.set_title("Android ADB file manager")
 		#self.adb = 'adb'
 		self.host_cwd = args[0] if args else os.getcwd()
-		self.aafm.set_device_cwd('/mnt/sdcard/')
+		self.aafm.set_device_cwd(args[1] if args and len(args) > 1 else self.DEVICE_ROOT)
 
 		self.refresh_all()
 
@@ -171,13 +172,13 @@ class Aafm_GUI:
 		self.aafm.refresh_devices()
 		selected = self.aafm.get_device_serial()
 		if before != selected:
-			self.aafm.set_device_cwd('/mnt/sdcard/')
+			self.aafm.set_device_cwd(self.DEVICE_ROOT)
 			self.refresh_device_files()
 
 		def on_menu_item_toggled(item, serial):
 			if item.get_active():
 				self.aafm.set_device_serial(serial)
-				self.aafm.set_device_cwd('/mnt/sdcard/')
+				self.aafm.set_device_cwd(self.DEVICE_ROOT)
 				self.refresh_device_files()
 
 		menu = self.menuDevices
