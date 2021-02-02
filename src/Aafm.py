@@ -106,6 +106,8 @@ class Aafm:
 			command = ['ls', '-l', '-a', '"%s"' % device_dir]
 			pattern = re.compile(r"^(?P<permissions>[dl\-][rwx\-]+)\s+((?P<nlinks>\d+)\s+)?(?P<owner>\w+)\W+(?P<group>[\w_]+)\W*(?P<size>\d+)?\W+(?P<datetime>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (?P<name>.+)$")
 
+		tot_pattern = re.compile(r'^total \d+$')
+
 		entries = {}
 
 		for line in self.adb_shell(*command):
@@ -142,7 +144,7 @@ class Aafm:
 					'group': group
 				}
 
-			else:
+			elif not tot_pattern.match(line):
 				print line, "wasn't matched, please report to the developer!"
 
 		return entries
