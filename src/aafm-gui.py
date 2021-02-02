@@ -12,6 +12,7 @@ import stat
 import pwd
 import grp
 import urllib
+import sys
 
 if os.name == 'nt':
 	import win32api
@@ -35,7 +36,7 @@ class Aafm_GUI:
 	TEXT_ATOM = gtk.gdk.atom_intern("text/plain")
 	XDS_FILENAME = 'whatever.txt'
 
-	def __init__(self):
+	def __init__(self, args):
 		
 		# The super core
 		self.aafm = Aafm('adb', os.getcwd(), '/mnt/sdcard/')
@@ -152,7 +153,7 @@ class Aafm_GUI:
 		# Some more subtle details...
 		self.window.set_title("Android ADB file manager")
 		#self.adb = 'adb'
-		self.host_cwd = os.getcwd()
+		self.host_cwd = args[0] if args else os.getcwd()
 		self.aafm.set_device_cwd('/mnt/sdcard/')
 
 		self.refresh_all()
@@ -877,5 +878,5 @@ class Aafm_GUI:
 
 
 if __name__ == '__main__':
-	gui = Aafm_GUI()
+	gui = Aafm_GUI(sys.argv[1:])
 	gui.main()

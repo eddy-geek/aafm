@@ -83,7 +83,7 @@ class Aafm:
 		return self.device_list_files_parsed(self._path_join_function(self.device_cwd, ''))
 
 	def get_free_space(self):
-		lines = self.adb_shell('df', self.device_cwd)
+		lines = self.adb_shell('df', '"%s"' % self.device_cwd)
 		if len(lines) != 2 or not lines[0].startswith('Filesystem'):
 			return '-'
 
@@ -103,8 +103,8 @@ class Aafm:
 			command = ['ls', '-l', '-A', '-e', '--color=never', device_dir]
 			pattern = re.compile(r"^(?P<permissions>[dl\-][rwx\-]+)\s+(?P<hardlinks>\d+)\s+(?P<owner>[\w_]+)\s+(?P<group>[\w_]+)\s+(?P<size>\d+)\s+(?P<datetime>\w{3} \w{3}\s+\d+\s+\d{2}:\d{2}:\d{2} \d{4}) (?P<name>.+)$")
 		else:
-			command = ['ls', '-l', '-a', device_dir]
-			pattern = re.compile(r"^(?P<permissions>[dl\-][rwx\-]+) (?P<owner>\w+)\W+(?P<group>[\w_]+)\W*(?P<size>\d+)?\W+(?P<datetime>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (?P<name>.+)$")
+			command = ['ls', '-l', '-a', '"%s"' % device_dir]
+			pattern = re.compile(r"^(?P<permissions>[dl\-][rwx\-]+)\s+((?P<nlinks>\d+)\s+)?(?P<owner>\w+)\W+(?P<group>[\w_]+)\W*(?P<size>\d+)?\W+(?P<datetime>\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (?P<name>.+)$")
 
 		entries = {}
 
